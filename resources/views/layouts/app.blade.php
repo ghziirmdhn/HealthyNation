@@ -5,44 +5,129 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     @vite('resources/css/app.css')
+    <script defer src="https://unpkg.com/alpinejs@3.x.x/dist/cdn.min.js"></script>
     <title>@yield('title', 'My Website')</title>
 </head>
 <body class="bg-black">
     <!-- Navbar -->
-    <header class="absolute inset-x-0 top-0 z-50 bg-black">
-        <nav class="flex items-center justify-between p-6 lg:px-8" aria-label="Global">
-            <div class="flex lg:flex-1">
-                <a href="{{ route('user.home') }}" class="-m-1.5 p-1.5">
-                    <span class="sr-only">Your Company</span>
-                    <img action="" class="h-8 w-auto" src="https://tailwindui.com/plus/img/logos/mark.svg?color=white&shade=600" alt="">
-                </a>
-            </div>
-            <div class="flex lg:hidden">
-                <button type="button" class="-m-2.5 inline-flex items-center justify-center rounded-md p-2.5 text-white">
-                    <span class="sr-only">Open main menu</span>
-                    <svg class="size-6" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" aria-hidden="true">
-                        <path stroke-linecap="round" stroke-linejoin="round" d="M3.75 6.75h16.5M3.75 12h16.5m-16.5 5.25h16.5"/>
-                    </svg>
-                </button>
-            </div>
-            <div class="hidden lg:flex lg:gap-x-12">
-                <a href="{{ route('membership') }}" class="text-sm font-semibold text-white">Membership</a>
-                <a href="{{ route('article.index') }}" class="text-sm font-semibold text-white">Article</a>
-                <a href="{{ route('class.index') }}" class="text-sm font-semibold text-white">Class</a>
-                <a href="{{ route('facilities') }}" class="text-sm font-semibold text-white">Facilities</a>
-            </div>
-            <div class="hidden lg:flex lg:flex-1 lg:justify-end">
-                <a href="#" class="text-sm font-semibold text-white">Log in <span aria-hidden="true">&rarr;</span></a>
-            </div>
-        </nav>
-    </header>    
+    <header class="fixed w-full top-0 z-50 bg-black/90 backdrop-blur-sm border-b border-white/10">
+      <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+          <div class="flex h-20 items-center justify-between">
+              <!-- Logo -->
+              <div class="flex-shrink-0">
+                  <a href="{{ route('user.home') }}" class="flex items-center">
+                      <img class="h-12 w-auto hover:opacity-80 transition-opacity" 
+                           src="{{ asset('assets/logo.png') }}" 
+                           alt="Logo">
+                      <span class="ml-3 text-xl font-bold text-white hover:text-yellow-500 transition-colors">HealthyNation</span>
+                  </a>
+              </div>
+  
+              <!-- Navigation Links -->
+              <nav class="hidden md:flex space-x-10">
+                  <a href="{{ route('membership') }}" 
+                     class="text-gray-300 hover:text-yellow-500 font-medium transition-colors duration-300 relative group">
+                      Membership
+                      <span class="absolute bottom-0 left-0 w-full h-0.5 bg-yellow-500 transform scale-x-0 group-hover:scale-x-100 transition-transform duration-300"></span>
+                  </a>
+                  <a href="{{ route('article.index') }}" 
+                     class="text-gray-300 hover:text-yellow-500 font-medium transition-colors duration-300 relative group">
+                      Article
+                      <span class="absolute bottom-0 left-0 w-full h-0.5 bg-yellow-500 transform scale-x-0 group-hover:scale-x-100 transition-transform duration-300"></span>
+                  </a>
+                  <a href="{{ route('class.index') }}" 
+                     class="text-gray-300 hover:text-yellow-500 font-medium transition-colors duration-300 relative group">
+                      Class
+                      <span class="absolute bottom-0 left-0 w-full h-0.5 bg-yellow-500 transform scale-x-0 group-hover:scale-x-100 transition-transform duration-300"></span>
+                  </a>
+                  <a href="{{ route('facilities') }}" 
+                     class="text-gray-300 hover:text-yellow-500 font-medium transition-colors duration-300 relative group">
+                      Facilities
+                      <span class="absolute bottom-0 left-0 w-full h-0.5 bg-yellow-500 transform scale-x-0 group-hover:scale-x-100 transition-transform duration-300"></span>
+                  </a>
+              </nav>
+  
+              <!-- Profile Dropdown -->
+              <div class="flex items-center">
+                  <div class="relative ml-3" x-data="{ open: false }">
+                      <button @click="open = !open" 
+                              class="flex items-center space-x-4 focus:outline-none">
+                          <div class="h-10 w-10 rounded-full overflow-hidden border-2 border-yellow-500 hover:border-yellow-400 transition-colors">
+                              <img src="{{ asset('assets/profile.jpg') }}" 
+                                   alt="Profile" 
+                                   class="h-full w-full object-cover">
+                          </div>
+                          <svg class="w-5 h-5 text-gray-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/>
+                          </svg>
+                      </button>
+  
+                      <!-- Dropdown Menu -->
+                      <div x-show="open" 
+                           @click.away="open = false"
+                           class="absolute right-0 mt-2 w-48 bg-black/90 backdrop-blur-sm border border-white/10 rounded-xl shadow-lg py-1">
+                          <a href="#" class="block px-4 py-2 text-sm text-gray-300 hover:text-yellow-500 hover:bg-white/5">
+                              Profile
+                          </a>
+                          <a href="#" class="block px-4 py-2 text-sm text-gray-300 hover:text-yellow-500 hover:bg-white/5">
+                              Settings
+                          </a>
+                          <a href="#" class="block px-4 py-2 text-sm text-gray-300 hover:text-yellow-500 hover:bg-white/5">
+                              Privacy Policy
+                          </a>
+                          <hr class="my-1 border-white/10">
+                          <form method="POST" action="">
+                              @csrf
+                              <button type="submit" 
+                                      class="block w-full text-left px-4 py-2 text-sm text-gray-300 hover:text-yellow-500 hover:bg-white/5">
+                                  Logout
+                              </button>
+                          </form>
+                      </div>
+                  </div>
+              </div>
+  
+              <!-- Mobile menu button -->
+              <div class="md:hidden">
+                  <button type="button" 
+                          class="text-gray-300 hover:text-yellow-500 focus:outline-none">
+                      <svg class="h-6 w-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"/>
+                      </svg>
+                  </button>
+              </div>
+          </div>
+      </div>
+  </header>
 
     <!-- Main Content -->
     <div class="relative isolate px-6 pt-14 lg:px-8">
         @yield('content')
     </div>
 
-    <!-- Footer or Additional Scripts -->
+
+    <!--Loading Screen-->
+    <div id="loadingOverlay" class="hidden fixed inset-0 bg-black bg-opacity-50 items-center justify-center z-50">
+      <div class="bg-white p-6 rounded-lg shadow-xl text-center">
+          <div class="animate-spin rounded-full h-12 w-12 border-4 border-blue-500 border-t-transparent mx-auto mb-4"></div>
+          <p class="text-gray-700 font-semibold">Loading...</p>
+      </div>
+  </div>
+
+  <!-- [footer section remains the same] -->
+
+  <!-- Payment Form Script -->
+  <script>
+      document.addEventListener('DOMContentLoaded', function() {
+          const paymentForm = document.querySelector('form[action*="payment"]');
+          if (paymentForm) {
+              paymentForm.addEventListener('submit', function() {
+                  document.getElementById('loadingOverlay').classList.remove('hidden');
+              });
+          }
+      });
+  </script>
+      <!-- Footer or Additional Scripts -->
     <footer class="bg-black">
         <div class="mx-auto max-w-5xl px-4 py-16 sm:px-6 lg:px-8">
           <div class="flex justify-center text-teal-600 dark:text-teal-300">
@@ -94,63 +179,6 @@
             Lorem ipsum dolor, sit amet consectetur adipisicing elit. Incidunt consequuntur amet culpa cum
             itaque neque.
           </p>
-      
-          <ul class="mt-12 flex flex-wrap justify-center gap-6 md:gap-8 lg:gap-12">
-            <li>
-              <a
-                class="text-gray-700 transition hover:text-gray-700/75 dark:text-white dark:hover:text-white/75"
-                href="#"
-              >
-                About
-              </a>
-            </li>
-      
-            <li>
-              <a
-                class="text-gray-700 transition hover:text-gray-700/75 dark:text-white dark:hover:text-white/75"
-                href="#"
-              >
-                Careers
-              </a>
-            </li>
-      
-            <li>
-              <a
-                class="text-gray-700 transition hover:text-gray-700/75 dark:text-white dark:hover:text-white/75"
-                href="#"
-              >
-                History
-              </a>
-            </li>
-      
-            <li>
-              <a
-                class="text-gray-700 transition hover:text-gray-700/75 dark:text-white dark:hover:text-white/75"
-                href="#"
-              >
-                Services
-              </a>
-            </li>
-      
-            <li>
-              <a
-                class="text-gray-700 transition hover:text-gray-700/75 dark:text-white dark:hover:text-white/75"
-                href="#"
-              >
-                Projects
-              </a>
-            </li>
-      
-            <li>
-              <a
-                class="text-gray-700 transition hover:text-gray-700/75 dark:text-white dark:hover:text-white/75"
-                href="#"
-              >
-                Blog
-              </a>
-            </li>
-          </ul>
-      
           <ul class="mt-12 flex justify-center gap-6 md:gap-8">
             <li>
               <a

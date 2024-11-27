@@ -14,7 +14,7 @@
             <div class="bg-white shadow rounded-lg p-6 text-center">
                 <h2 class="text-xl font-semibold mb-4">Monthly Plan</h2>
                 <p class="text-gray-700 mb-4">100k Rupiah / month</p>
-                <a href="/payment-details?plan=monthly" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
+                <a href="{{ route('payment.detail', ['plan' => 'monthly']) }}" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
                     Select Plan
                 </a>
             </div>
@@ -22,7 +22,7 @@
             <div class="bg-white shadow rounded-lg p-6 text-center">
                 <h2 class="text-xl font-semibold mb-4">Middle Class</h2>
                 <p class="text-gray-700 mb-4">550k Rupiah / 6 months</p>
-                <a href="/payment-details?plan=middle_class" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
+                <a href="{{ route('payment.detail', ['plan' => 'middle_class']) }}" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
                     Select Plan
                 </a>
             </div>
@@ -30,11 +30,11 @@
             <div class="bg-white shadow rounded-lg p-6 text-center">
                 <h2 class="text-xl font-semibold mb-4">Annual Plan</h2>
                 <p class="text-gray-700 mb-4">1000k Rupiah / 12 months</p>
-                <a href="/payment-details?plan=annual" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
+                <a href="{{ route('payment.detail', ['plan' => 'annual']) }}" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
                     Select Plan
                 </a>
             </div>
         </div>
     </div>
 </body>
-</html>    
+</html>

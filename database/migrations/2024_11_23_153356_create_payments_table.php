@@ -14,8 +14,14 @@ return new class extends Migration
     if (!Schema::hasTable('payments')) {
         Schema::create('payments', function (Blueprint $table) {
             $table->id();
-            $table->decimal('amount', 8, 2);
-            $table->string('method')->nullable();
+            $table->string('first_name');
+            $table->string('last_name');
+            $table->string('location');
+            $table->string('email');
+            $table->string('method');
+            $table->string('plan'); // Kolom 'plan'
+            $table->integer('amount');
+            $table->string('status');
             $table->timestamps();
         });
     }
