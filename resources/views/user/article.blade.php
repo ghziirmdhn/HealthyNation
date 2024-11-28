@@ -8,7 +8,7 @@
     <!-- Section Heading -->
     <div class="text-center mb-12">
       <h2 class="text-3xl font-extrabold text-gray-900 sm:text-4xl">Latest Articles</h2>
-      <p class="mt-4 text-gray-600">
+      <p class="mt-4 text-gray-600">          
         Stay informed with our latest tips, guides, and articles on fitness, health, and nutrition.
       </p>
     </div>

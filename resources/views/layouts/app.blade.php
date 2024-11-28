@@ -19,7 +19,7 @@
                       <img class="h-12 w-auto hover:opacity-80 transition-opacity" 
                            src="{{ asset('assets/logo.png') }}" 
                            alt="Logo">
-                      <span class="ml-3 text-xl font-bold text-white hover:text-yellow-500 transition-colors">HealthyNation</span>
+                      <span class="ml-3 text-xl font-bold text-white hover:text-yellow-500 transition-colors">GYMSTER</span>
                   </a>
               </div>
   
@@ -47,45 +47,53 @@
                   </a>
               </nav>
   
-              <!-- Profile Dropdown -->
-              <div class="flex items-center">
-                  <div class="relative ml-3" x-data="{ open: false }">
-                      <button @click="open = !open" 
-                              class="flex items-center space-x-4 focus:outline-none">
-                          <div class="h-10 w-10 rounded-full overflow-hidden border-2 border-yellow-500 hover:border-yellow-400 transition-colors">
-                              <img src="{{ asset('assets/profile.jpg') }}" 
-                                   alt="Profile" 
-                                   class="h-full w-full object-cover">
+              <!-- Profile/Auth Section -->
+                <div class="flex items-center">
+                  @auth
+                      <div class="relative ml-3" x-data="{ open: false }">
+                          <button @click="open = !open" 
+                                  class="flex items-center space-x-4 focus:outline-none">
+                              <div class="h-10 w-10 rounded-full overflow-hidden border-2 border-yellow-500 hover:border-yellow-400 transition-colors">
+                                  <img src="{{ asset('assets/profile.jpg') }}" 
+                                      alt="Profile" 
+                                      class="h-full w-full object-cover">
+                              </div>
+                              <svg class="w-5 h-5 text-gray-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/>
+                              </svg>
+                          </button>
+
+                          <!-- Dropdown Menu -->
+                          <div x-show="open" 
+                              @click.away="open = false"
+                              class="absolute right-0 mt-2 w-48 bg-black/90 backdrop-blur-sm border border-white/10 rounded-xl shadow-lg py-1">
+                              <a href="{{ route('profile') }}" class="block px-4 py-2 text-sm text-gray-300 hover:text-yellow-500 hover:bg-white/5">
+                                  Profile
+                              </a>
+                              <a href="{{ route('settings') }}" class="block px-4 py-2 text-sm text-gray-300 hover:text-yellow-500 hover:bg-white/5">
+                                  Settings
+                              </a>
+                              <hr class="my-1 border-white/10">
+                              <form method="POST" action="{{ route('user.logout') }}">
+                                  @csrf
+                                  <button type="submit" 
+                                          class="block w-full text-left px-4 py-2 text-sm text-gray-300 hover:text-yellow-500 hover:bg-white/5">
+                                      Logout
+                                  </button>
+                              </form>
                           </div>
-                          <svg class="w-5 h-5 text-gray-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/>
-                          </svg>
-                      </button>
-  
-                      <!-- Dropdown Menu -->
-                      <div x-show="open" 
-                           @click.away="open = false"
-                           class="absolute right-0 mt-2 w-48 bg-black/90 backdrop-blur-sm border border-white/10 rounded-xl shadow-lg py-1">
-                          <a href="#" class="block px-4 py-2 text-sm text-gray-300 hover:text-yellow-500 hover:bg-white/5">
-                              Profile
-                          </a>
-                          <a href="#" class="block px-4 py-2 text-sm text-gray-300 hover:text-yellow-500 hover:bg-white/5">
-                              Settings
-                          </a>
-                          <a href="#" class="block px-4 py-2 text-sm text-gray-300 hover:text-yellow-500 hover:bg-white/5">
-                              Privacy Policy
-                          </a>
-                          <hr class="my-1 border-white/10">
-                          <form method="POST" action="">
-                              @csrf
-                              <button type="submit" 
-                                      class="block w-full text-left px-4 py-2 text-sm text-gray-300 hover:text-yellow-500 hover:bg-white/5">
-                                  Logout
-                              </button>
-                          </form>
                       </div>
-                  </div>
-              </div>
+                  @else
+                      <a href="{{ route('user.login') }}" 
+                        class="text-gray-300 hover:text-yellow-500 font-medium transition-colors duration-300">
+                          Login
+                      </a>
+                      <a href="{{ route('user.register') }}" 
+                        class="ml-4 px-4 py-2 rounded-lg bg-yellow-500 text-black font-medium hover:bg-yellow-400 transition-colors duration-300">
+                          Register
+                      </a>
+                  @endauth
+                </div>
   
               <!-- Mobile menu button -->
               <div class="md:hidden">
@@ -101,7 +109,7 @@
   </header>
 
     <!-- Main Content -->
-    <div class="relative isolate px-6 pt-14 lg:px-8">
+    <div class="relative isolate px-6 pt-14 lg:px-3">
         @yield('content')
     </div>
 

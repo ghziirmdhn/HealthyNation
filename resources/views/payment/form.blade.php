@@ -6,10 +6,20 @@
         <div class="bg-white/10 backdrop-blur-lg rounded-3xl p-8 shadow-2xl border border-white/20">
             <h1 class="text-4xl font-bold text-white mb-8">Complete Your Purchase</h1>
             
-            <form action="{{ route('payment.process') }}" method="POST">
+            <form action="{{ route('payment.process') }}" method="POST" class="space-y-6">
                 @csrf
                 <input type="hidden" name="plan" value="{{ $plan }}">
                 <input type="hidden" name="amount" value="{{ $amount }}">
+                
+                @if($errors->any())
+                <div class="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative" role="alert">
+                    <ul>
+                        @foreach($errors->all() as $error)
+                            <li>{{ $error }}</li>
+                        @endforeach
+                    </ul>
+                </div>
+                @endif
                 
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                     <div class="space-y-4">

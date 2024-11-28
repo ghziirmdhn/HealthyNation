@@ -2,8 +2,8 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
 use App\Models\Payment;
+use Illuminate\Http\Request;
 use Exception;
 
 class PaymentController extends Controller
@@ -16,49 +16,69 @@ class PaymentController extends Controller
 
     public function showPaymentForm(Request $request)
     {
-        $plan = $request->query('plan', 'monthly');
-        
-        if (!array_key_exists($plan, $this->pricing)) {
-            return redirect()->route('membership')->with('error', 'Invalid plan selected');
+        try {
+            $plan = $request->query('plan', 'monthly');
+            
+            if (!array_key_exists($plan, $this->pricing)) {
+                return redirect()->route('membership')->with('error', 'Invalid plan selected');
+            }
+            
+            $amount = $this->pricing[$plan];
+            return view('payment.form', compact('plan', 'amount'));
+        } catch (Exception $e) {
+            return redirect()->route('membership')
+                           ->with('error', 'Error loading payment form');
         }
-        
-        $amount = $this->pricing[$plan];
-        return view('payment.form', compact('plan', 'amount'));
     }
 
     public function processPayment(Request $request)
     {
         try {
+            // Validate the request
             $validated = $request->validate([
                 'first_name' => 'required|string|max:255',
                 'last_name' => 'required|string|max:255',
-                'location' => 'required|string|max:255',
                 'email' => 'required|email',
+                'location' => 'required|string|max:255',
                 'method' => 'required|in:visa,mastercard,apple_pay',
                 'plan' => 'required|in:monthly,middle_class,annual',
+                'amount' => 'required|numeric'
             ]);
 
-            $payment = new Payment();
-            $payment->first_name = $validated['first_name'];
-            $payment->last_name = $validated['last_name'];
-            $payment->location = $validated['location'];
-            $payment->email = $validated['email'];
-            $payment->method = $validated['method'];
-            $payment->plan = $validated['plan'];
-            $payment->amount = $this->pricing[$validated['plan']];
-            $payment->status = 'Successful';
-            $payment->save();
+            // Create payment record
+            $payment = Payment::create([
+                'first_name' => $validated['first_name'],
+                'last_name' => $validated['last_name'],
+                'email' => $validated['email'],
+                'location' => $validated['location'],
+                'method' => $validated['method'],
+                'plan' => $validated['plan'],
+                'amount' => $validated['amount'],
+                'status' => 'Successful'
+            ]);
 
-            return redirect()->route('payment.receipt', ['id' => $payment->id]);
+            return redirect()->route('payment.receipt', ['id' => $payment->id])
+                           ->with('success', 'Payment processed successfully');
+
         } catch (Exception $e) {
             return redirect()->route('payment.result', ['status' => 'Failed'])
-                ->withErrors('Error processing payment: ' . $e->getMessage());
+                           ->withErrors('Error processing payment');
         }
     }
 
     public function receipt($id)
     {
-        $payment = Payment::findOrFail($id);
-        return view('payment.receipt', compact('payment'));}
-}
+        try {
+            $payment = Payment::findOrFail($id);
+            return view('payment.receipt', compact('payment'));
+        } catch (Exception $e) {
+            return redirect()->route('membership')
+                           ->with('error', 'Error retrieving payment receipt');
+        }
+    }
 
+    public function paymentResult($status)
+    {
+        return view('payment.result', ['status' => $status]);
+    }
+}

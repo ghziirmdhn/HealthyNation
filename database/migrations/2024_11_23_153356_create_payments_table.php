@@ -6,28 +6,23 @@ use Illuminate\Support\Facades\Schema;
 
 return new class extends Migration
 {
-    /**
-     * Run the migrations.
-     */
     public function up()
-{
-    if (!Schema::hasTable('payments')) {
+    {
         Schema::create('payments', function (Blueprint $table) {
             $table->id();
             $table->string('first_name');
             $table->string('last_name');
-            $table->string('location');
             $table->string('email');
+            $table->string('location');
+            $table->decimal('amount', 10, 2);
             $table->string('method');
-            $table->string('plan'); // Kolom 'plan'
-            $table->integer('amount');
-            $table->string('status');
+            $table->string('plan');
+            $table->string('status')->default('pending');
             $table->timestamps();
         });
     }
-}
 
-    public function down(): void
+    public function down()
     {
         Schema::dropIfExists('payments');
     }

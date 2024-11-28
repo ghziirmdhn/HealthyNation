@@ -25,50 +25,46 @@ class UserAuthController extends Controller
     // Proses Register
     public function register(Request $request)
     {
-        $validatedData = $request->validate([
-            'name' => 'required|string|max:255',
+        // Validate request
+        $request->validate([
             'email' => 'required|email|unique:users',
-            'password' => 'required|min:8|confirmed',
+            'username' => 'required|string|max:255',
+            'password' => 'required|string|min:8|confirmed',
         ]);
 
-        $user = User::create([
-            'name' => $validatedData['name'],
-            'email' => $validatedData['email'],
-            'password' => Hash::make($validatedData['password']),
-        ]);
+        try {
+            // Create new user
+            $user = User::create([
+                'name' => $request->username,  // Sesuaikan dengan field di database
+                'email' => $request->email,
+                'password' => Hash::make($request->password),
+            ]);
 
-        Auth::login($user);
+            // Log the user in
+            Auth::login($user);
 
-        return redirect()->route('user.login');
-    }
+            return redirect()->route('user.home')->with('success', 'Registration successful!');
+        } catch (\Exception $e) {
+            return back()->withErrors(['error' => 'Registration failed: ' . $e->getMessage()]);}}
 
-    // Proses Login
-    public function login(Request $request)
-    {
-        $credentials = $request->validate([
-            'email' => 'required|email',
-            'password' => 'required',
-        ]);
-
-        if (Auth::attempt($credentials)) {
-            $request->session()->regenerate();
-
-            return redirect()->intended('/home');
-        }
-
-        return back()->withErrors([
-            'email' => 'Email atau password salah.',
-        ]);
-    }
 
     // Logout
     public function logout(Request $request)
     {
         Auth::logout();
-
         $request->session()->invalidate();
         $request->session()->regenerateToken();
-
-        return redirect('/login');
+        return redirect('/');
     }
+
+    public function profile()
+    {
+        return view('user.profile');
+    }
+
+    public function settings()
+    {
+        return view('user.settings');
+}
+
 }
